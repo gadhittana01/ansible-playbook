@@ -1,3 +1,8 @@
+[web_servers]
 ec2-54-210-170-227.compute-1.amazonaws.com ansible_user=ubuntu apache_package=apache2 php_package=libapache2-mod-php
-ec2-44-212-16-246.compute-1.amazonaws.com ansible_user=ubuntu apache_package=apache2 php_package=libapache2-mod-php
-ec2-54-227-6-82.compute-1.amazonaws.com ansible_user=ubuntu apache_package=apache2 php_package=libapache2-mod-php
+
+[db_servers]
+ec2-44-212-16-246.compute-1.amazonaws.com ansible_user=ubuntu db_package=postgresql db_depndencies=postgresql-contrib
+
+[file_servers]
+ec2-54-227-6-82.compute-1.amazonaws.com ansible_user=ubuntu file_package=samba

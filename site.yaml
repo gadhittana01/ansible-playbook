@@ -1,0 +1,43 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+    - name: install update (Ubuntu)
+      apt:
+        upgrade: dist
+        update_cache: yes
+      when: ansible_distribution in ["Ubuntu","Debian"]
+
+- hosts: web_servers
+  become: true
+  tasks: 
+    - name: install apache2 package & php package
+      package:
+        name: 
+          - "{{ apache_package }}"
+          - "{{ php_package }}"
+        state: latest
+      when: ansible_distribution in ["Ubuntu","Debian"]
+
+- hosts: db_servers
+  become: true
+  tasks: 
+    - name: install postgres (Ubuntu)
+      package:
+        name: 
+          - "{{ db_package }}"
+          - "{{ db_depndencies }}"
+        state: latest
+      when: ansible_distribution in ["Ubuntu","Debian"]
+
+- hosts: file_servers
+  become: true
+  tasks: 
+    - name: install samba package (Ubuntu)
+      package:
+        name: 
+          - "{{ file_package }}"
+        state: latest
+      when: ansible_distribution in ["Ubuntu","Debian"]
