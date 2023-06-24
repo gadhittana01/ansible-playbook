@@ -6,3 +6,6 @@ ec2-44-212-16-246.compute-1.amazonaws.com ansible_user=ubuntu db_package=postgre
 
 [file_servers]
 ec2-54-227-6-82.compute-1.amazonaws.com ansible_user=ubuntu file_package=samba
+
+[workstations]
+ec2-52-90-199-198.compute-1.amazonaws.com ansible_user=ubuntu unzip_package=unzip
