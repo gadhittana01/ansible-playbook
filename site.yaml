@@ -4,13 +4,22 @@
   become: true
   pre_tasks:
 
-    - name: install update (Ubuntu)
+    - name: update repo cache (Ubuntu)
       tags: always
       apt:
-        upgrade: dist
         update_cache: yes
       when: ansible_distribution in ["Ubuntu","Debian"]
 
+- hosts: all
+  become: true
+  tasks:
+
+    - name: add ssh key for simone
+      tags: always
+      authorized_key:
+        user: simone
+        key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5sN0/lb/+5WiqYQwZl0sxkeU8N1Y+jSqgh/ajdmINBXawu0+pV5YR4dxCrDg6v3KgfcknyeEzxGD5PBkBW3jFrctIhUeP/sgxBPh5yXJ3hvmf+kx0zL6AsA5lOdtAXKL/jakB2A48MJqtznrNI3El6qaCfxjuHYclvQ8LmzxxltLdnWuoPJS7iLjBJcq8FPy2hxiQZxC2PXgYlS2NDKa16XTIGvIxl5yhOqkUFxyk9vhU5TkaQi0WRJlPxzrU2twHFGA0ZYOvVCm1I9tFMEw3yze7UEs5DDyLkJulALULiG2BJmT5NWPg2DN1JoG/gYpiMdZRAgTDRhVRxXbmmSfv"
+    
 - hosts: web_servers
   become: true
   tasks: 
