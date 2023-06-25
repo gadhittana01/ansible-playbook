@@ -1,0 +1,50 @@
+- name: install apache2 package & php package
+  tags: web,apache2,ubuntu
+  package:
+    name: 
+      - "{{ apache_package }}"
+      - "{{ php_package }}"
+    state: latest
+  when: ansible_distribution in ["Ubuntu","Debian"]
+
+- name: start apache 2 service
+  tags: web,apache2,ubuntu
+  service:
+    name: "{{ apache_package }}"
+    state: started
+    enabled: yes
+  when: ansible_distribution in ["Ubuntu","Debian"]
+
+- name: copy default html file for site
+  tags: web,html,ubuntu
+  copy:
+    src: default.html
+    dest: /var/www/html/site.html
+    owner: root
+    group: root
+  when: ansible_distribution in ["Ubuntu","Debian"]
+  
+- name: change title web server
+  tags: web,apache2,ubuntu
+  lineinfile: 
+    path: /var/www/html/site.html
+    regexp: '<title>Giri Putra Adhittana</title>'
+    line: <title>gadhittana01</title>
+  when: ansible_distribution in ["Ubuntu","Debian"]
+  register: apache2
+
+- name: change title web server
+  tags: web,apache2,ubuntu
+  lineinfile: 
+    path: /var/www/html/site.html
+    regexp: '<title>Giri Putra Adhittana</title>'
+    line: <title>gadhittana01</title>
+  when: ansible_distribution in ["Ubuntu","Debian"]
+  register: apache2
+
+- name: restart apache2
+  tags: web,apache2,ubuntu
+  service:
+    name: "{{ apache_package }}"
+    state: restarted
+  when: ansible_distribution in ["Ubuntu","Debian"] and apache2.changed

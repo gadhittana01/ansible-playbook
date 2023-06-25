@@ -1,0 +1,8 @@
+- name: install postgres (Ubuntu)
+  tags: db,postgres,ubuntu
+  package:
+    name: 
+      - "{{ db_package }}"
+      - "{{ db_depndencies }}"
+    state: latest
+  when: ansible_distribution in ["Ubuntu","Debian"]

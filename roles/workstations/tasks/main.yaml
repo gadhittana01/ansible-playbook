@@ -1,0 +1,17 @@
+- name: install unzip
+  tags: web,apache2,ubuntu
+  package:
+    name: 
+      - "{{ unzip_package }}"
+    state: latest
+  when: ansible_distribution in ["Ubuntu","Debian"]
+- name: install terraform
+  tags: web,apache2,ubuntu
+  unarchive:
+    src: https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip
+    dest: /usr/sbin/
+    remote_src: yes
+    mode: 0755
+    owner: root
+    group: root
+  when: ansible_distribution in ["Ubuntu","Debian"]

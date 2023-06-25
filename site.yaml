@@ -12,108 +12,25 @@
 
 - hosts: all
   become: true
-  tasks:
-
-    - name: add ssh key for simone
-      tags: always
-      authorized_key:
-        user: simone
-        key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5sN0/lb/+5WiqYQwZl0sxkeU8N1Y+jSqgh/ajdmINBXawu0+pV5YR4dxCrDg6v3KgfcknyeEzxGD5PBkBW3jFrctIhUeP/sgxBPh5yXJ3hvmf+kx0zL6AsA5lOdtAXKL/jakB2A48MJqtznrNI3El6qaCfxjuHYclvQ8LmzxxltLdnWuoPJS7iLjBJcq8FPy2hxiQZxC2PXgYlS2NDKa16XTIGvIxl5yhOqkUFxyk9vhU5TkaQi0WRJlPxzrU2twHFGA0ZYOvVCm1I9tFMEw3yze7UEs5DDyLkJulALULiG2BJmT5NWPg2DN1JoG/gYpiMdZRAgTDRhVRxXbmmSfv"
+  roles:
+    - base
     
 - hosts: web_servers
   become: true
-  tasks: 
-    - name: install apache2 package & php package
-      tags: web,apache2,ubuntu
-      package:
-        name: 
-          - "{{ apache_package }}"
-          - "{{ php_package }}"
-        state: latest
-      when: ansible_distribution in ["Ubuntu","Debian"]
-
-    - name: start apache 2 service
-      tags: web,apache2,ubuntu
-      service:
-        name: "{{ apache_package }}"
-        state: started
-        enabled: yes
-      when: ansible_distribution in ["Ubuntu","Debian"]
-
-    - name: copy default html file for site
-      tags: web,html,ubuntu
-      copy:
-        src: default.html
-        dest: /var/www/html/site.html
-        owner: root
-        group: root
-      when: ansible_distribution in ["Ubuntu","Debian"]
-      
-    - name: change title web server
-      tags: web,apache2,ubuntu
-      lineinfile: 
-        path: /var/www/html/site.html
-        regexp: '<title>Giri Putra Adhittana</title>'
-        line: <title>gadhittana01</title>
-      when: ansible_distribution in ["Ubuntu","Debian"]
-      register: apache2
-    
-    - name: change title web server
-      tags: web,apache2,ubuntu
-      lineinfile: 
-        path: /var/www/html/site.html
-        regexp: '<title>Giri Putra Adhittana</title>'
-        line: <title>gadhittana01</title>
-      when: ansible_distribution in ["Ubuntu","Debian"]
-      register: apache2
-    
-    - name: restart apache2
-      tags: web,apache2,ubuntu
-      service:
-        name: "{{ apache_package }}"
-        state: restarted
-      when: ansible_distribution in ["Ubuntu","Debian"] and apache2.changed
+  roles:
+    - web_servers
 
 - hosts: workstations
   become: true
-  tasks: 
-    - name: install unzip
-      tags: web,apache2,ubuntu
-      package:
-        name: 
-          - "{{ unzip_package }}"
-        state: latest
-      when: ansible_distribution in ["Ubuntu","Debian"]
-    - name: install terraform
-      tags: web,apache2,ubuntu
-      unarchive:
-        src: https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip
-        dest: /usr/sbin/
-        remote_src: yes
-        mode: 0755
-        owner: root
-        group: root
-      when: ansible_distribution in ["Ubuntu","Debian"]
+  roles:
+    - workstations
 
 - hosts: db_servers
   become: true
-  tasks: 
-    - name: install postgres (Ubuntu)
-      tags: db,postgres,ubuntu
-      package:
-        name: 
-          - "{{ db_package }}"
-          - "{{ db_depndencies }}"
-        state: latest
-      when: ansible_distribution in ["Ubuntu","Debian"]
+  roles:
+    - db_servers
 
 - hosts: file_servers
   become: true
-  tasks: 
-    - name: install samba package (Ubuntu)
-      tags: file,samba,ubuntu
-      package:
-        name: 
-          - "{{ file_package }}"
-        state: latest
-      when: ansible_distribution in ["Ubuntu","Debian"]
+  roles:
+    - file_servers

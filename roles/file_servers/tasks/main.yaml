@@ -1,0 +1,7 @@
+- name: install samba package (Ubuntu)
+  tags: file,samba,ubuntu
+  package:
+    name: 
+      - "{{ file_package }}"
+    state: latest
+  when: ansible_distribution in ["Ubuntu","Debian"]
